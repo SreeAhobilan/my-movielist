@@ -85,4 +85,13 @@ h1{
   display: flex;
   justify-content: space-between;
 }
+nav>div{
+  padding: 10px;
+  border: 3px solid white;
+  background-color: aliceblue;
+  width: 15%;
+}
+nav{
+  margin-left: 20px;
+}
 
