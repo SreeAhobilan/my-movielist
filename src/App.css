@@ -67,7 +67,7 @@
   gap: 4rem;
 }
 body{
-  background-color:black;
+  background-color: black;
 }
 h1{
   text-align: center;
@@ -94,4 +94,50 @@ nav>div{
 nav{
   margin-left: 20px;
 }
-
+.game-box{
+  height: 8rem;
+  width: 8rem;
+  border: 3px solid white;
+  border-radius: 1rem;
+  color: white;
+  font-size: 7rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 20px;
+  cursor: pointer;
+}
+.game-box:hover{
+  background-color:rgb(200, 198, 198);
+}
+.board{
+  display: grid;
+  align-content: center;
+  grid-template-columns: repeat(3, 1fr);
+  /* background-color: wheat; */
+  width: min-content;
+  padding-left: 37%;
+}
+h2{
+  color: white;
+  text-align: center;
+}
+.game-box{
+  text-align: center;
+}
+.buttons-tag{
+  display: grid;
+  place-items: center;
+}
+.xbtn,.obtn{
+  display: grid;
+  text-align: center;
+  font-family:'Staatliches', cursive;
+  font-size: 2rem;
+}
+.reset{
+  display: grid;
+}
+span{
+  color: white;
+}

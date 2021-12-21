@@ -6,34 +6,41 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 //import { Switch } from '@mui/material';
 import { Route,Switch,Link,useParams,useHistory } from 'react-router-dom';
-import MenuTwoToneIcon from '@mui/icons-material/MenuTwoTone';
+//import MenuTwoToneIcon from '@mui/icons-material/MenuTwoTone';
 import InfoIcon from '@mui/icons-material/Info';
-
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import 'animate.css';
+import { AppBar, Toolbar } from '@mui/material';
+import useWindowSize from 'react-use/lib/useWindowSize'
+import Confetti from 'react-confetti'
+import ButtonGroup from '@mui/material/ButtonGroup';
+import RestartAltTwoToneIcon from '@mui/icons-material/RestartAltTwoTone';
 
 export default function App(){
-  const [showData,showHiding]=useState(false);
-  const styles={display:(showData)?"block":"none"}
+  //const [showData,showHiding]=useState(false);
+  const history=useHistory();
 return(
   <div className="App">
-    <IconButton aria-label="menuBar" size="larger" color="error"
-        onClick={()=>{showHiding(!showData);}}>
-      <MenuTwoToneIcon/>
-      </IconButton>
-  <nav style={styles}>
-    <div>
-  <Link to="/">Home</Link>
-  </div>
-  <div>
-  <Link to="/movies">Movies</Link>
-  </div>
-  <div>
-  <Link to="/add-movies">Add Movies</Link>
-  </div>
-  </nav>
+<AppBar position='static' sx={{background:"red"}}>
+  <Toolbar>
+    <Button color='inherit' onClick={()=>history.push("/")}>
+      Home
+    </Button>
+    <Button color='inherit' onClick={()=>history.push("/movies")}>
+      Movies
+    </Button>
+    <Button color='inherit' onClick={()=>history.push("/add-movies")}>
+      Add Movie
+    </Button>
+    <Button color='inherit' onClick={()=>history.push("/game")}>
+      Game
+    </Button>
+  </Toolbar>
+</AppBar>
 
 <Switch>
   <Route exact path="/">
-    <div className='bg-img'><h1>welcome</h1></div>
+    <div className='bg-img'><h1 class="animate__animated animate__bounceInRight">Welcome To My Page</h1></div>
   </Route>
   <Route exact path="/movies">
     <div className='movies'><Call/></div>
@@ -44,6 +51,9 @@ return(
   <Route exact path="/movies/:id">
   <Details/>
   </Route>
+  <Route exact path="/game">
+  <div className='gaming'><TickTacToe/></div>
+  </Route>
   <Route path="**">
     <Notfound/>
   </Route>
@@ -53,10 +63,12 @@ return(
 }
 function Details(){
   let {id} = useParams();
+  const history=useHistory();
   const movieViewed = updatedmovies[id];
   return (<div>
         <iframe width="811" height="456" src={movieViewed.trailer} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         <h1>{movieViewed.name}</h1>
+        <ArrowBackIcon color='primary' onClick={()=>history.goBack}></ArrowBackIcon>
         <p style={{color:'white'}}>{movieViewed.rating}</p>
         <p style={{color:'white'}}>{movieViewed.summary}</p>
   </div>)
@@ -70,6 +82,79 @@ function Notfound(){
     alt=""/>
     </div>
   )
+}
+function TickTacToe(){
+  const { width, height } = useWindowSize()
+  const defaultvalues=[
+    null,null,null,null,null,null,null,null,null,
+  ];
+  const [board,setBoard]=useState(defaultvalues);
+  const [isXTurn,setIsXturn]=useState("");
+  const handleClick=(index)=>{
+    if(!winner && !board[index]){
+    console.log("clicked",index);
+    const boardCopy=[...board];
+    boardCopy[index]=isXTurn?"X":"O";
+    setBoard(boardCopy);
+    setIsXturn(!isXTurn);
+    }
+  };
+  const decideWinner=board=>{
+    const lines=[
+      [0,1,2],
+      [3,4,5],
+      [6,7,8],
+      [0,3,6],
+      [1,4,7],
+      [2,5,8],
+      [0,4,8],
+      [3,4,5],
+    ];
+    for (let i=0;i < lines.length;i++){
+      const [a,b,c]=lines[i];
+      if(board[a]!==null &&board[a]===board[b]&&board[a]===board[c]){
+      console.log("winner is",board[a]);
+      return board[a];
+      }
+    }
+    return null;
+  };
+  const winner=decideWinner(board);
+  return (
+    <div className='game-head'>
+      <h1 class="animate__animated animate__bounceInRight">Tick Tack Toe</h1>
+      <div className='buttons-tag'>
+        <div>
+        <ButtonGroup  class="animate__animated animate__backInDown animate__delay-2s" disableElevation variant="contained">
+        <Button onClick={()=>setIsXturn(true)}>
+        X
+        </Button>
+        <Button onClick={()=>setIsXturn(false)}>
+        O
+        </Button>
+        </ButtonGroup>
+        </div>
+        </div>
+      {isXTurn===true?<p className='xbtn' style={{color:"white"}}>It's X Turn</p>:isXTurn===false?<p className='obtn' style={{color:"white"}}>Its O Turn</p>:""}
+    <div className='board'>
+    {board.map((val,index)=>(
+      <GameBox val={val} onPlayerClick={()=>handleClick(index)}/>
+    ))}
+  <div>
+  {winner?<div className='reset'><Confetti width={width} height={height}></Confetti><span>the winner is {winner}</span><span><RestartAltTwoToneIcon style={{color:"white"}} onClick={()=>setBoard(defaultvalues)}>Reset</RestartAltTwoToneIcon></span></div>:"**"}
+  </div>
+  </div>
+  </div>
+  );
+}
+function GameBox({val,onPlayerClick}){
+  //const val="X";
+  //const [val,setVal]=useState(null);
+  const styles={color:val==="X"?"white":"red"}
+  return <div style={styles} 
+  onClick={()=>onPlayerClick()}
+  className='game-box'>{val}
+  </div>
 }
 const movies=[
   {
@@ -152,7 +237,7 @@ function Call(){
   const movieList=(updatedmovies.length>movies.length)?updatedmovies:movies;
   return(
     <div>
-    <h1>Marvel Cinematic Universe</h1>
+    <h1  class="animate__animated animate__bounceInRight">Marvel Cinematic Universe</h1>
     <div className="list">
   {movieList.map(({name,poster,rating,summary},index)=>
     <Movie key={index} id={index} name={name} poster={poster} rating={rating} summary={summary}/>)}
