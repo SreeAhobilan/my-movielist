@@ -1,0 +1,58 @@
+[
+  {
+    "id": "100",
+    "name": "Spiderman No Way Home",
+    "trailer": "https://www.youtube.com/embed/ZYzbalQ6Lg8",
+    "poster": "https://terrigen-cdn-dev.marvel.com/content/prod/1x/spider-mannowayhome_lob_crd_03.jpg",
+    "rating": "7.8",
+    "summary": "With Spider-Man's identity now revealed, our friendly neighborhood web-slinger is unmasked and no longer able to separate his normal life as Peter Parker from the high stakes of being a superhero. When Peter asks for help from Doctor Strange, the stakes become even more dangerous, forcing him to discover what it truly means to be Spider-Man."
+  },
+  {
+    "id": "101",
+    "name": "Eternals",
+    "trailer": "https://www.youtube.com/embed/x_me3xsvDgk",
+    "poster": "https://wdwnt.com/wp-content/uploads/2021/02/Eternals-calendar-art-8557558-1200x1200.jpeg",
+    "rating": "6.8",
+    "summary": "The Eternals, a race of immortal beings with superhuman powers who have secretly lived on Earth for thousands of years, reunite to battle the evil Deviants."
+  },
+  {
+    "id": "102",
+    "name": "Shang-Chi",
+    "trailer": "https://www.youtube.com/embed/8YjFbMbfXaQ",
+    "poster": "https://www.themoviedb.org/t/p/original/1BIoJGKbXjdFDAqUEiA2VHqkK1Z.jpg",
+    "rating": "8.8",
+    "summary": "Martial-arts master Shang-Chi confronts the past he thought he left behind when he's drawn into the web of the mysterious Ten Rings organization."
+  },
+  {
+    "id": "103",
+    "name": "Black Widow",
+    "trailer": "https://www.youtube.com/embed/Fp9pNPdNwjI",
+    "poster": "https://m.media-amazon.com/images/M/MV5BNjRmNDI5MjMtMmFhZi00YzcwLWI4ZGItMGI2MjI0N2Q3YmIwXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+    "rating": "6.7",
+    "summary": "Natasha Romanoff, a former KGB spy, is shocked to find out that her ex handler, General Dreykov, is still alive. While evading capture by Taskmaster, she is forced to confront her dark past."
+  },
+  {
+    "id": "104",
+    "name": "Spiderman Far Away From Home",
+    "trailer": "ttps://www.youtube.com/embed/Nt9L1jCKGnE",
+    "poster": "https://m.media-amazon.com/images/I/9113Gh15i2L._SL1500_.jpg",
+    "rating": "8.6",
+    "summary": "Peter Parker, the beloved superhero Spider-Man, faces four destructive elemental monsters while on holiday in Europe. Soon, he receives help from Mysterio, a fellow hero with mysterious origins."
+  },
+  {
+    "id": "105",
+    "name": "Avengers Endgame",
+    "trailer": "https://www.youtube.com/embed/TcMBFSGVi1c",
+    "poster": "https://lumiere-a.akamaihd.net/v1/images/p_avengersendgame_19751_e14a0104.jpeg?region=0%2C0%2C540%2C810",
+    "rating": "9.2",
+    "summary": "After Thanos, an intergalactic warlord, disintegrates half of the universe, the Avengers must reunite and assemble again to reinvigorate their trounced allies and restore balance."
+  },
+  {
+    "id": "106",
+    "name": "Captain Marvel",
+    "trailer": "https://www.youtube.com/embed/Z1BCujX3pw8",
+    "poster": "https://terrigen-cdn-dev.marvel.com/content/prod/1x/3-sam_gilbey.jpg",
+    "rating": "6.8",
+    "summary": "Amidst a mission, Vers, a Kree warrior, gets separated from her team and is stranded on Earth. However, her life takes an unusual turn after she teams up with Fury, a S.H.I.E.L.D. agent."
+  }
+]
