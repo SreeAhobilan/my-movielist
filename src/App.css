@@ -106,3 +106,17 @@ span{
 .theme{
   min-height: calc(100vh - 64px);
 }
+.editMovie>h3{
+  text-align: center;
+  color: white;
+  background-color: red;
+  font-family: 'Staatliches', cursive;
+  font-size:4rem;
+}
+.editMovie{
+    display: grid;
+    justify-items: center;
+}
+.editMovie>input{
+  width: 20%;
+}

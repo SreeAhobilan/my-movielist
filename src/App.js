@@ -15,7 +15,9 @@ import RestartAltTwoToneIcon from '@mui/icons-material/RestartAltTwoTone';
 import { createContext, useContext} from "react";
 
 const themeCtx = createContext(null);
-export default function App(){
+export default
+
+function App(){
   // const movies=[
   //   {
   //     id:"100",
@@ -74,26 +76,27 @@ export default function App(){
   //     summary:"Amidst a mission, Vers, a Kree warrior, gets separated from her team and is stranded on Earth. However, her life takes an unusual turn after she teams up with Fury, a S.H.I.E.L.D. agent."
   //   }
   // ];
-  const [list,setList]=useState([]);
-  useEffect(()=>{
-    fetch("https://619dc51f131c600017089034.mockapi.io/users",{method:"GET"})
-    .then((data)=>data.json())
-    .then((mvs)=>setList(mvs))
-  })
   const [theme, setTheme] = useState(false);
 return(
   <themeCtx.Provider value={[theme, setTheme]}>
   <div className="App">
-  <Appbar list={list} setList={setList}/>
+  <Appbar/>
   </div>
   </themeCtx.Provider>
 );
 }
-function Details({list}){
+function Details(){
   let {id} = useParams();
+  const [movieViewed,setMovie]=useState([]);
   const history=useHistory();
-  const movieViewed = list[id];
-  return (<div>
+  const gettingdetails=()=>{
+    fetch(`https://619dc51f131c600017089034.mockapi.io/users/${id}`)
+    .then((data)=>data.json())
+    .then((movie)=>setMovie(movie))
+  }
+  useEffect(gettingdetails,[])
+  return (
+  <div>
         <iframe width="811" height="456" src={movieViewed.trailer} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         <h1>{movieViewed.name}</h1>
         <ArrowBackIcon color='primary' onClick={()=>history.goBack}></ArrowBackIcon>
@@ -172,7 +175,7 @@ function TickTacToe(){
       <GameBox val={val} onPlayerClick={()=>handleClick(index)}/>
     ))}
   <div>
-  {winner?<div className='reset'><Confetti width={width} height={height}></Confetti><span>the winner is {winner}</span><span><RestartAltTwoToneIcon  onClick={()=>setBoard(defaultvalues)}>Reset</RestartAltTwoToneIcon></span></div>:"**"}
+  {winner?<div className='reset'><Confetti width={width} height={height}></Confetti><span>the winner is {winner}</span><span><RestartAltTwoToneIcon  onClick={()=>setBoard(defaultvalues)}>Reset</RestartAltTwoToneIcon></span></div>:""}
   </div>
   </div>
   </div>
@@ -186,7 +189,7 @@ function GameBox({val,onPlayerClick}){
   className='game-box'>{val}
   </div>
 }
-function Movie({name,poster,rating,summary,id,deletion,index}){
+function Movie({name,poster,rating,summary,id,deletion}){
   const history=useHistory();
   const check=(rating>=8.5)?"green" : "red";
   const style=(check==="green")?{background:"green",color:"white"} :{background:"red",color:"white"};
@@ -204,22 +207,27 @@ function Movie({name,poster,rating,summary,id,deletion,index}){
       <div className='buttons'>
       <Button onClick={()=>setShow(!show)} variant="text">Toggle Summary</Button>
       <IconButton color='primary' onClick={()=>history.push(`/movies/${id}`)}><InfoIcon/></IconButton>
-      <IconButton onClick={()=>deletion(id,index)} color='error'aria-label="delete" size="large"><DeleteIcon fontSize="inherit" /></IconButton>
+      <Button color='primary' onClick={()=>history.push(`/edit-movies/${id}`)}>edit</Button>
+      <IconButton onClick={()=>deletion(id)} color='error'aria-label="delete" size="large"><DeleteIcon fontSize="inherit" /></IconButton>
       </div>
       {show?<p className="movie-summary">{summary}</p>:""}
     </div>
   )
 }
-function Call({list,setList}){
+function Call(){
+  const [list,setList]=useState([]);
+  const getList=()=> {
+    fetch("https://619dc51f131c600017089034.mockapi.io/users",{method:"GET"})
+    .then((data)=>data.json())
+    .then((mvs)=>setList(mvs))
+  }
   const [theme] = useContext(themeCtx);
   const style1={background:(theme)?"white":"black",color:(theme)?"black":"white"};
-  const items=(id,deleteindex)=>{
-  const updatelist=list.filter((movie,index)=>index!==deleteindex);
-      setList(updatelist)
-    // const updatelist=list.filter((movie,id)=>id!==index);
-    // setList(updatelist)
+  const items=(id)=>{
     fetch(`https://619dc51f131c600017089034.mockapi.io/users/${id}`,{method:"DELETE"})
+    .then(()=>getList())
   }
+  useEffect(getList,[]);
   return(
     <div style={style1} className='theme'>
     <h1  className="animate__animated animate__bounceInRight">Marvel Cinematic Universe</h1>
@@ -230,28 +238,92 @@ function Call({list,setList}){
     </div>
   )
 }
-function Addmovie({list,setList}){
+function Addmovie(){
 const [name,setName]=useState("");
 const [poster,setPoster]=useState("");
 const [rating,setRating]=useState("");
 const [summary,setSummary]=useState("");
-const newMovie={name,poster,rating,summary}
+const [trailer,setTrailer]=useState("");
 const [theme] = useContext(themeCtx);
 const history=useHistory();
 const style1={background:(theme)?"white":"black",color:(theme)?"black":"white"}
+const addedmovie=()=>{
+  const newMovie={name,poster,rating,summary,trailer}
+  fetch("https://619dc51f131c600017089034.mockapi.io/users",{method:"POST",
+  body:JSON.stringify(newMovie),
+  headers:{"Content-Type":"application/json"}
+})
+.then(()=>history.push("/movies"));
+}
   return(
     <div style={style1} className='theme'>
       <div className='addmovielist'>
       <input onChange={(event)=>setName(event.target.value)} placeholder='Enter Movie Name'/>
       <input onChange={(event)=>setPoster(event.target.value)} placeholder='Enter Movie Image'/>
+      <input onChange={(event)=>setTrailer(event.target.value)} placeholder='Enter Trailer URL'/>
       <input onChange={(event)=>setRating(event.target.value)} placeholder='Enter Movie Rating'/>
       <input onChange={(event)=>setSummary(event.target.value)} placeholder='Enter Movie Summary'/>
-      <Button onClick={()=>{setList([...list,newMovie]);history.push("/movies")}} variant="contained" color="success">Add Movie</Button>
+      <Button onClick={()=>addedmovie()} variant="contained" color="success">Add Movie</Button>
     </div>
     </div>
   )
 }
-function Appbar({list,setList}){
+function Edit(){
+  const {id}=useParams();
+  const history = useHistory();
+  const[name,setName]=useState("");
+  const[image,setImage] = useState("");
+  const[trailer,setTrailer] = useState("");
+  const[rating,setRating]=useState("");
+  const[summary,setSummary]=useState("");
+  const [theme] = useContext(themeCtx);
+  const style1={background:(theme)?"white":"black",color:(theme)?"black":"white"}
+
+  const reAssigning=({name,poster,trailer,rating,summary})=>{
+      setName(name);
+      setImage(poster);
+      setTrailer(trailer);
+      setRating(rating);
+      setSummary(summary);
+  }
+  const editing=()=>{
+    fetch(`https://619dc51f131c600017089034.mockapi.io/users/${id}`,{method:"GET"})
+    .then((data)=>data.json())
+    .then((movie)=>reAssigning(movie))
+
+  }
+  useEffect(editing,[]);
+
+  const Edits=()=>{
+    const editedMovie = {name,image,trailer,rating,summary};
+    fetch(`https://619dc51f131c600017089034.mockapi.io/users/${id}`,
+            {method:"PUT",
+            body:JSON.stringify(editedMovie),
+            headers:{"Content-Type":"application/json"}})
+      .then(()=>history.push("/movies"));
+  }
+
+  return(
+  <div>
+    <div style={style1} className="editMovie">
+        <h3 className="head">Edit your movies</h3>
+
+        <input placeholder='enter movie name' value={name} onChange={(event)=>{setName(event.target.value);}}/>
+        <br/>
+        <input placeholder='enter movie image url' value={image} onChange={(event)=>{setImage(event.target.value);}}/>
+        <br/>
+        <input placeholder='enter the movie trailer url' value={trailer} onChange={(event)=>{setTrailer(event.target.value);}}/>
+        <br/>
+        <input placeholder='enter movie rating' value={rating} onChange={(event)=>{setRating(event.target.value);}}/>
+        <br/>
+        <input placeholder='enter movie summary' value={summary} onChange={(event)=>{setSummary(event.target.value);}}/>
+        <br/>
+      <Button className="button"  variant="contained" color="success" onClick={()=>Edits()}>Add Movie</Button>
+      <Button className="cancelButton" variant="contained" color="error" onClick={()=>{history.push(`/movies`)}}>Cancel</Button>
+    </div>
+  </div>)
+}
+function Appbar(){
   const history=useHistory();
   const [theme, setTheme] = useContext(themeCtx);
   const style={background:(theme)?"black":"white",color:(theme)?"white":"black"}
@@ -281,13 +353,16 @@ function Appbar({list,setList}){
     <div style={style1} className='theme'><h1 className="animate__animated animate__bounceInRight">Welcome To My Page</h1></div>
   </Route>
   <Route exact path="/movies">
-    <div className='movies'><Call list={list} setList={setList}/></div>
+    <div className='movies'><Call/></div>
   </Route>
   <Route exact path="/add-movies">
-  <div className='add-movies'><Addmovie list={list} setList={setList}/></div>
+  <div className='add-movies'><Addmovie/></div>
+  </Route>
+  <Route exact path="/edit-movies/:id">
+  <div className='edit-movies'><Edit/></div>
   </Route>
   <Route exact path="/movies/:id">
-  <Details list={list}/>
+  <Details/>
   </Route>
   <Route exact path="/game">
   <div className='gaming'><TickTacToe/></div>
